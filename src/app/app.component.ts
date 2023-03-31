@@ -14,10 +14,12 @@ export class AppComponent {
     year: 2023,
   };
 
-  nameInput: string;
-
   constructor(private readonly cd: ChangeDetectorRef) {}
 
+  /** This could also be placed inside the period component, but
+    this also demonstrates that CD happening in a parent will cause
+    issues in the child component.
+  */
   runChangeDetection(): void {
     this.cd.detectChanges();
   }
