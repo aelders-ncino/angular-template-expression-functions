@@ -1,10 +1,35 @@
-<p>{{ transformLabelName() }}</p>
-<p>{{ periodName }}</p>
+<p>Method call: {{ transformLabelName(true) }}</p>
 <p>
   Calls to 'transformLabelName' because of Change Detection:
   {{ transformLabelNameCallCount }}
 </p>
+<hr />
+
+<p>Getter/property: {{ period.name }}</p>
 <p>
   Calls to 'periodName' getter because of Change Detection:
   {{ getterCallCount }}
 </p>
+<hr />
+
+<p>Class variable: {{ periodProperty }}</p>
+<p>
+  Calls to 'periodProperty' class variable because of Change Detection:
+  {{ variableCallCount }}
+</p>
+<hr />
+
+<p>Pure pipe: {{ period | period }}</p>
+<p>
+  Calls to pure pipe to transform this.period because of Change Detection: (see
+  console logs)
+</p>
+<hr />
+
+<label for="periodName">Period Name:</label><br />
+<input
+  type="text"
+  id="periodName"
+  [(ngModel)]="period.name"
+  (ngModelChange)="updatePeriod($event)"
+/>

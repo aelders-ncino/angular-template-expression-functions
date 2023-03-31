@@ -1,4 +1,10 @@
-import { Component, Input } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 
 export interface JSPeriod {
   apexType?: string;
@@ -10,24 +16,45 @@ export interface JSPeriod {
   analyst?: string;
 }
 
+// Add `changeDetection: ChangeDetectionStrategy.OnPush` to this component to see
+// how the OnPush strategy affects the CD calls
 @Component({
   selector: 'app-period',
   templateUrl: './period.component.html',
   styleUrls: ['./period.component.css'],
 })
-export class PeriodComponent {
-  @Input()
-  period: JSPeriod;
+export class PeriodComponent implements OnInit, OnChanges {
+  @Input() period: JSPeriod;
+
+  periodProperty: string;
 
   transformLabelNameCallCount = 0;
   getterCallCount = 0;
+  variableCallCount = 0;
 
-  transformLabelName(): string {
-    console.log(
-      `transformLabelName called ${++this.transformLabelNameCallCount} times!`
-    );
+  ngOnInit(): void {
+    this.periodProperty = this.transformLabelName();
+    this.variableCallCount++;
+  }
+
+  ngOnChanges(change: SimpleChanges): void {
+    this.period = change['period'].currentValue;
+    this.periodProperty = this.transformLabelName();
+  }
+
+  transformLabelName(cdCall: boolean = false): string {
+    if (cdCall) {
+      this.transformLabelNameCallCount++;
+    }
 
     return `${this.period.name} - ${this.period.month}/${this.period.year}`;
+  }
+
+  updatePeriod(value: any): void {
+    this.period = {
+      ...this.period,
+      name: value,
+    };
   }
 
   get periodName(): string | undefined {
